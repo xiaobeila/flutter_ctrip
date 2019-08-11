@@ -3,6 +3,8 @@ import 'package:flutter_ctrip/pages/home_page.dart';
 import 'package:flutter_ctrip/pages/my_page.dart';
 import 'package:flutter_ctrip/pages/search_page.dart';
 import 'package:flutter_ctrip/pages/travel_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:package_info/package_info.dart';
 
 class TabNavigator extends StatefulWidget {
   @override
@@ -14,6 +16,13 @@ class _TabNavigatorState extends State<TabNavigator> {
   int _currentIndex = 0;
   final _defaultColor = Colors.grey;
   final _activeColor = Colors.blue;
+  DateTime _lastPressedAt; //上次点击时间
+
+  @override
+  void initState(){
+    getPackageInfo();
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -21,7 +30,32 @@ class _TabNavigatorState extends State<TabNavigator> {
     super.dispose();
   }
 
-  Future<bool> exitApp() {}
+  //退出app
+  Future<bool> exitApp() {
+    if (_lastPressedAt == null ||
+        DateTime.now().difference(_lastPressedAt) > Duration(seconds: 2)) {
+      Fluttertoast.showToast(
+          msg: "再按一次退出应用",
+          backgroundColor: Colors.grey,
+          toastLength: Toast.LENGTH_SHORT,
+          fontSize: 14);
+      //两次点击间隔超过2秒则重新计时
+      _lastPressedAt = DateTime.now();
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
+  //获取packageInfo
+  void getPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    print(
+        'appName:$appName,packageName:$packageName,version:$version,buildNumber:$buildNumber}');
+  }
 
   @override
   Widget build(BuildContext context) {
