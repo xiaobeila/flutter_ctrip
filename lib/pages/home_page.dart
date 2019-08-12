@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ctrip/widget/loading_container.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:flutter_ctrip/model/common_model.dart';
+import 'package:flutter_ctrip/model/grid_nav_model.dart';
 import 'package:flutter_ctrip/widget/webview.dart';
 import 'package:flutter_ctrip/widget/cached_image.dart';
 import 'package:flutter_ctrip/util/navigator_util.dart';
 import 'package:flutter_ctrip/model/home_model.dart';
 import 'package:flutter_ctrip/dao/home_dao.dart';
+import 'package:flutter_ctrip/widget/local_nav.dart';
+import 'package:flutter_ctrip/widget/grid_nav.dart';
+import 'package:flutter_ctrip/widget/sub_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -20,6 +24,9 @@ class _HomePageState extends State<HomePage>
   bool _loading = true; //页面加载状态
   double appBarAlpha = 0;
   List<CommonModel> bannerList = []; //轮播图列表
+  List<CommonModel> localNavList = []; //local导航
+  GridNavModel gridNav; //网格卡片
+  List<CommonModel> subNavList = []; //活动导航
 
   @override
   void initState() {
@@ -50,6 +57,9 @@ class _HomePageState extends State<HomePage>
       HomeModel model = await HomeDao.fetch();
       setState(() {
         bannerList = model.bannerList;
+        localNavList = model.localNavList;
+        gridNav = model.gridNav;
+        subNavList = model.subNavList;
         _loading = false;
       });
     } catch (e) {
@@ -123,6 +133,17 @@ class _HomePageState extends State<HomePage>
       children: <Widget>[
         /*轮播图*/
         _banner,
+        Padding(
+            padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
+            child: LocalNav(localNavList: localNavList)),
+        Padding(
+          padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
+          child: GridNav(gridNav: gridNav),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
+          child: SubNav(subNavList: subNavList),
+        )
       ],
     );
   }
