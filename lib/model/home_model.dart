@@ -1,6 +1,7 @@
 import 'package:flutter_ctrip/model/common_model.dart';
 import 'package:flutter_ctrip/model/grid_nav_model.dart';
 import 'package:flutter_ctrip/model/config_model.dart';
+import 'package:flutter_ctrip/model/sales_box_model.dart';
 
 class HomeModel {
   final ConfigModel config;
@@ -8,13 +9,15 @@ class HomeModel {
   final List<CommonModel> localNavList;
   final GridNavModel gridNav;
   final List<CommonModel> subNavList;
+  final SalesBoxModel salesBox;
 
   HomeModel(
       {this.config,
       this.bannerList,
       this.localNavList,
       this.gridNav,
-      this.subNavList});
+      this.subNavList,
+      this.salesBox});
 
   factory HomeModel.fromJson(Map<String, dynamic> json) {
     var bannerListJson = json['bannerList'] as List;
@@ -35,6 +38,7 @@ class HomeModel {
       localNavList: localNavList,
       gridNav: GridNavModel.fromJson(json['gridNav']),
       subNavList: subNavList,
+      salesBox: SalesBoxModel.fromJson(json['salesBox']),
     );
   }
 }

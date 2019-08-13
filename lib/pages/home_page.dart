@@ -7,10 +7,12 @@ import 'package:flutter_ctrip/widget/webview.dart';
 import 'package:flutter_ctrip/widget/cached_image.dart';
 import 'package:flutter_ctrip/util/navigator_util.dart';
 import 'package:flutter_ctrip/model/home_model.dart';
+import 'package:flutter_ctrip/model/sales_box_model.dart';
 import 'package:flutter_ctrip/dao/home_dao.dart';
 import 'package:flutter_ctrip/widget/local_nav.dart';
 import 'package:flutter_ctrip/widget/grid_nav.dart';
 import 'package:flutter_ctrip/widget/sub_nav.dart';
+import 'package:flutter_ctrip/widget/sales_box.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -27,6 +29,7 @@ class _HomePageState extends State<HomePage>
   List<CommonModel> localNavList = []; //local导航
   GridNavModel gridNav; //网格卡片
   List<CommonModel> subNavList = []; //活动导航
+  SalesBoxModel salesBox; //salesBox数据
 
   @override
   void initState() {
@@ -60,6 +63,7 @@ class _HomePageState extends State<HomePage>
         localNavList = model.localNavList;
         gridNav = model.gridNav;
         subNavList = model.subNavList;
+        salesBox = model.salesBox;
         _loading = false;
       });
     } catch (e) {
@@ -133,17 +137,25 @@ class _HomePageState extends State<HomePage>
       children: <Widget>[
         /*轮播图*/
         _banner,
+        /*local导航*/
         Padding(
             padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
             child: LocalNav(localNavList: localNavList)),
+        /*网格卡片*/
         Padding(
           padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
           child: GridNav(gridNav: gridNav),
         ),
+        /*活动导航*/
         Padding(
           padding: EdgeInsets.fromLTRB(12, 4, 12, 4),
           child: SubNav(subNavList: subNavList),
-        )
+        ),
+        /*底部卡片*/
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child: SalesBox(salesBox: salesBox),
+        ),
       ],
     );
   }
